@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <script type="text/javascript" src="apy.js"></script>
+    <script type="text/javascript" src="apy-promise.js"></script>
+    <script type="text/javascript" src="apy-doc.js"></script>
+    <script type="text/javascript" src="apy-core.js"></script>
+</head>
+<body>
+
+<h2>Test</h2> 
+<div id='a' />
+
+<script type="text/javascript">
+
+var p0 = A.Promise.defer(3000,'I','like promise')
+.then(function(a,b){
+	A.byId('a').innerHTML=a+' '+b;
+	return A.Promise.defer(-2000,'And more...');
+})
+.then(null,function(a){
+	console.log(a);A.byId('a').innerHTML=a;
+	return A.Promise.defer(2000,'not any more!');
+})
+.then(function(a){
+	console.log(a);
+	A.byId('a').innerHTML=a;
+	return A.Promise.defer(1000,'p0');
+});
+
+var p1 = A.Promise.defer(10000,'p1');
+var p2 = A.Promise.defer(4000,'p2');
+var p3 = A.Promise.defer(3000,'p3');
+var p4 = A.Promise.defer(2000,'p4');
+
+p0.join(p1,p2,p3,p4).then(function(r0,r1,r2,r3,r4){
+	A.byId('a').innerHTML=' '+r0.concat(r1,r2,r3,r4).join(',');
+});
+
+var bunch = [A.Promise.defer(30000,'b1'),A.Promise.defer(5000,'b2'),A.Promise.defer(8000,'b3'),A.Promise.defer(2000,'b4')];
+
+A.Promise.joinarray(bunch).then(function(ar){
+	A.byId('a').innerHTML=' '+ar.join(',');
+});
+
+
+</script>
+
+</body>
+</html>

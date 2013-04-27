@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <script type="text/javascript" src="apy.js"></script>
+    <script type="text/javascript" src="apy-promise.js"></script>
+    <script type="text/javascript" src="apy-doc.js"></script>
+    <script type="text/javascript" src="apy-core.js"></script>
+</head>
+<body>
+
+<h2>Test</h2>
+
+<script type="text/javascript">
+
+var Shape = A.Class.extend(function(x,y) {this.x=x;this.y=y;});
+Shape.method('print',function() {console.log('Shape X='+this.x+' Y='+this.y); return this});
+
+var Rectangel = Shape.extend(function(x,y,x1,y1) {
+	this._super(x,y);
+	this.x1=x1;
+	this.y1=y1;
+	this.o = {a:1,b:[1,{c:'1',d:'2'}]};
+	this.date = new Date(1977,02,06);
+	this.regexp1 = new RegExp('[a-z]*');
+	this.regexp2 = /[a-z]*/g;
+	this.transform = new Transform(10);
+	this.arr = [];
+	for (var i = 10000; i--;) {
+		this.arr[i] = new Transform(i*10);
+	};
+	this.args = arguments;
+}).define(function(){
+	this.method('print',function() {
+		this._super();
+		console.log('Rectangle X1='+this.x1+' Y1='+this.y1+' A='+this.angle+'o.b[1].d ='+ this.o.b[1].d);
+		return this
+	})	
+})
+.method('resize',function(w,h){x1=x+w;y1=y+h});
+/*
+Rectangel.method('print',function() {
+	this._super();
+	console.log('Rectangle X1='+this.x1+' Y1='+this.y1+' A='+this.angle+'o.b[1].d ='+ this.o.b[1].d);
+	return this
+});
+*/
+
+
+
+var Transform = A.Class.extend(function(angle) {this.angle=angle;});
+Transform.method('trans',function(){console.log('Call of trans() has been done.')})
+Rectangel.mixin(Transform);
+
+
+var rect = new Rectangel(20,20,40,40);
+rect.trans();
+rect.print();
+
+var rect1 = rect.clone();
+var rect2 = A.copy(rect1);
+var rect3 = rect2.shallow();
+
+//rect1.x = 1000;
+rect.o.b[1].d = 'YES';
+rect1.print();
+rect2.print();
+console.dir(rect);
+console.dir(rect1);
+console.dir(rect3);
+
+var t = new Transform(45);
+var s = new Shape(1,2);
+
+A.copy(s,t);
+
+t.print();
+//console.dir(t);
+
+var n = A.copy(rect);
+console.dir(n);
+
+
+</script>
+
+</body>
+</html>
